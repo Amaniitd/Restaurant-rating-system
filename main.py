@@ -34,8 +34,9 @@ def search_restaurant():
    pincode = request.args.get('pincode')
    cuisine = request.args.get('cuisine')
    price = request.args.get('price')
+   dish = request.args.get('dish')
    # create an instance of searchArgs
-   args = searchArgs(cuisine, price, pincode)
+   args = searchArgs(cuisine, price, pincode, dish)
    # execute the search
    restaurants = restaurant.search_restaurant(conn, args)
 

@@ -238,3 +238,19 @@ aside .right h3{
    margin-left: auto;
    margin-right: auto;
 }
+
+/* make main scrollable */
+main {
+    overflow-y: scroll;
+    height: 75vh;
+    padding: 0 1rem;
+    margin: 0 auto;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    resize: none;
+}
