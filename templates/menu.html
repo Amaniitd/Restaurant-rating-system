@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="Content/app.css">
+   <link rel="shortcut icon" href="./Assets/images/chef-hat.png" type="image/x-icon">
+   <link rel="stylesheet" href="./Content/appMediaWueries.css">
+   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   <title>Cool website name</title>
+</head>
+
+<body>
+   <!-- restaurant name heading -->
+   <div class="restaurantName">
+      <h2>{{menus.restaurant_name}}</h2>
+      <!-- horizonal line -->
+      <hr id = "line">
+   </div>
+<div class="menu-container">
+   {% for menu in menus.menus %}
+   <div class="menu-card">
+      <div class="card-text">
+         <p class="card-meal-type">{{ menu.category }}</p>
+         <h2 class="card-title">{{ menu.name }}</h2>
+         <p class="card-body">{{ menu.description }}</p>
+      </div>
+      <div class="card-price">${{ menu.price }}</div>
+   </div>
+   {% endfor %}
+</div>
+   </div>
+</body>
+<script src="https://kit.fontawesome.com/b98b113d2c.js" crossorigin="anonymous"></script>
+<script src="app.js"></script>
+<script src="index.js"></script>
+
+</html>

@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root{
+    --color-primary: #fff;
+    --font-family:poppins , 'Sans-serif';
+    --nav-background: #a882e4ca;
+    --color-isabeline:#e8f1f2;
+    --color-light: rgba(120, 120, 20, 0.18);
+    --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+}
+
+.container{
+    display: grid;
+    margin: 0 auto;
+    width: 80%;
+    gap: 3rem;
+    grid-template-columns: 1fr 3fr;
+}
+
+
+/* ====================== HEADING SECTION ============================== */
+.mainHeading h1{
+    margin: 0 auto;
+    width: 80%;
+    font-size: 2.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ====================== COLLAPSIBLE BUTTON ============================== */
+.container .openButton button{
+    font-size: 1.4rem;
+    width: 100%;
+    background: var(--color-primary);
+    border: none;
+    box-shadow: 2px 2px 2px #383D3B;
+}
+
+/* ====================== ASIDE SECTION ============================== */
+.container aside .right{
+    background: var(--color-isabeline);
+    text-align: left;
+    bottom: 0;
+    height: 75vh;
+    box-shadow: var(--box-shadow);
+    position: relative;
+
+  }
+  
+  @keyframes mymove {
+    from {right: 1000px;}
+    to {left: 0;}
+  }
+
+
+
+aside .right h2{
+    padding: 1rem 0 .5rem 2rem;
+}
+aside .right h3{
+    padding: 2rem 0 .5rem 2rem;
+    font-size: 1.1rem;  
+}
+
+
+
+/* ====================== MAIN SECTION ============================== */
+
+
+
+
+
+
+/* style the input bar with id = "pincode" */
+#pincode, #cuisine {
+    width: 90%;
+    padding: 12px 20px;
+    margin: 0 auto;
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    resize: none;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+#card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  padding: 10px 16px;
+   font-size: 16px;
+   margin-top: 10px;
+}
+
+/* On mouse-over, add a deeper shadow */
+#card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.menuButton {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  display: block;
+}
+
+#submit-btn {
+   background-color: #04AA6D;
+   color: white;
+   padding: 12px;
+   font-size: 16px;
+   border: none;
+   cursor: pointer;
+   width: 90%;
+   display: block;
+   margin: 0 auto;
+   margin-bottom: 10px;
+   margin-top: 10px;
+   border-radius: 4px;
+}
+
+#price {
+   width: 90%;
+   padding: 12px 20px;
+   margin: 0 auto;
+   display: block;
+   box-sizing: border-box;
+   border: 2px solid #ccc;
+   border-radius: 4px;
+   background-color: #f8f8f8;
+   font-size: 16px;
+   resize: none;
+}
+
+
+.menu-container{
+  width:100vw;
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  padding:40px 20px;
+}
+.menu-card{
+  display:flex;
+  flex-direction:column;
+  width:400px;
+  margin-bottom:60px;
+}
+.menu-card>div{
+  box-shadow:0 15px 20px 0 rgba(0,0,0,0.5);
+}
+.card-text{
+  margin:-30px auto;
+  margin-bottom:-50px;
+  height:300px;
+  width:300px;
+  background-color:#1D1C20;
+  color:#fff;
+  padding:20px;
+  word-wrap: break-word;
+  overflow:hidden;
+}
+.card-meal-type{
+  font-style:italic;
+}
+.card-title{
+  font-size:1.5rem;
+  margin-bottom:20px;
+  margin-top:5px;
+  word-wrap: break-word;
+}
+.card-body{
+  font-size:1rem;
+  word-wrap: break-word;
+}
+.card-price{
+  width:100px;
+  height:100px;
+  background-color:#970C0A;
+  color:#fff;
+  margin-left:auto;
+  font-size:1.5rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.restaurantName {
+   font-size: 1.5rem;
+   font-weight: bold;
+   margin-bottom: 10px;
+   margin-top: 10px;
+   text-align: center;
+}
+
+#line {
+   border: 2px solid #ccc;
+   margin-bottom: 10px;
+   margin-top: 10px;
+   width: 80%;
+   margin-left: auto;
+   margin-right: auto;
+}
