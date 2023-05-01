@@ -1,32 +1,59 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 
 import psycopg2
+import uuid
 
 from search import searchArgs
 from restaurant import restaurant
 from menu import menu, menus
 
 conn = psycopg2.connect(database="rest", user="postgres", password="2104", host="localhost", port="5432")
-print("Opened database successfully")
 
 
 app = Flask(__name__)
+
+app.secret_key = 'super secret key'
+
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+   if 'username' in session:
+      pincode = request.args.get('pincode')
+      cuisine = request.args.get('cuisine')
+      price = request.args.get('price')
+      dish = request.args.get('dish')
+      # create an instance of searchArgs
+      args = searchArgs(cuisine, price, pincode, dish)
+      # execute the search
+      restaurants = restaurant.search_restaurant(conn, args)
+      return render_template('index.html', restaurants=restaurants)
+   else:
+      return redirect(url_for('login'))
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-      if request.method == 'POST':
-         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-               flash('Invalid credentials')
-         else:
-               flash('You were successfully logged in')
-      return render_template('index.html')
+   if 'session_token' in session:
+      return redirect(url_for('index'))
+   if request.method == 'POST':
+      username = request.form['email']
+      password = request.form['userPassword']
+      print (username, password)
+      if username == 'admin' and password == 'admin':
+         session['username'] = username
+         session['session_token'] = str(uuid.uuid4())
+         return redirect(url_for('index'))
+      else:
+         return  render_template('login.html', error='Invalid username or password')
+   return render_template('login.html')
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+   return render_template('signup.html')
+
 
 @app.route('/update')
 def update():
-      return render_template('update.html')
+   return render_template('update.html')
 
 
 @app.route('/search', methods=['GET'])
@@ -55,7 +82,11 @@ def showMenu():
    return render_template('menu.html', menus=menus_arg)
 
    
-
+@app.route('/logout')
+def logout():
+   session.pop('username', None)
+   session.pop('session_token', None)
+   return redirect(url_for('login'))
 
 
 

@@ -9,8 +9,13 @@
 </head>
 <body>
     <div class="topnav">
-    <a class="active" href="/">Search</a>
-    <a href="./update">Update</a>
+        <a class="active" href="/">Search</a>
+        <a href="./update">Update</a>
+        <div class="user-name-logout">
+            <!-- fetch username and show it -->
+            <p>{{session['username']}}</p>
+            <a href="/logout">Logout</a>
+        </div>
     </div>
 
     <div class="mainHeading">
@@ -62,7 +67,24 @@
                 </form>
             </div>
         </aside>
-
+    <main>
+        <!-- iterate through the list -->
+        {% for restaurant in restaurants %}
+        <div id="card">
+            <h2>{{ restaurant.name }}</h2>
+            <p>
+            <Address>{{ restaurant.address }}</Address>
+            </p>
+            <p>Price Range: {{ restaurant.priceRange }}</p>
+            <form action="/showMenu" method="GET">
+                <input type="hidden" name="id" value="{{ restaurant.id }}">
+                <input type="hidden" name="name" value="{{ restaurant.name }}">
+                <button type="submit" class="menuButton">View Menu</button>
+            </form>
+        </div>
+        {% endfor %}
+    
+    </main>
     </div>
 </body>
     <script src="https://kit.fontawesome.com/b98b113d2c.js" crossorigin="anonymous"></script>
