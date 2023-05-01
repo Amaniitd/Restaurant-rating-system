@@ -15,6 +15,49 @@ app = Flask(__name__)
 app.secret_key = 'super secret key'
 
 
+def isUserExists(email, password):
+   # create a cursor
+   cur = conn.cursor()
+   # execute a query
+   exe_cmd = "SELECT * FROM users WHERE email = '" + email + "' AND password = '" + password + "';"
+   print (exe_cmd)
+   cur.execute(exe_cmd)
+   # fetch the results
+   rows = cur.fetchall()
+   # close the cursor
+   cur.close()
+   if len(rows) == 0:
+      return False
+   else:
+      return True
+
+def createUser(name, email, password):
+   if isUserExists(email, password):
+      return False
+   else:
+      # max of all existing user ids
+      cur = conn.cursor()
+      exe_cmd = "SELECT MAX(id) FROM users;"
+      cur.execute(exe_cmd)
+      rows = cur.fetchall()
+      cur.close()
+      max_id = rows[0][0]
+      if max_id == None:
+         max_id = 1
+      # create a cursor
+      cur = conn.cursor()
+      # execute a query
+      exe_cmd = "INSERT INTO users VALUES (" + str(max_id + 1) + ", '" + name + "', '" + email + "', '" + password + "');"
+      print (exe_cmd)
+      cur.execute(exe_cmd)
+      # commit the changes
+      conn.commit()
+      # close the cursor
+      cur.close()
+      return True
+
+
+
 @app.route('/')
 def index():
    if 'username' in session:
@@ -38,7 +81,7 @@ def login():
       username = request.form['email']
       password = request.form['userPassword']
       print (username, password)
-      if username == 'admin' and password == 'admin':
+      if isUserExists(username, password):
          session['username'] = username
          session['session_token'] = str(uuid.uuid4())
          return redirect(url_for('index'))
@@ -48,6 +91,20 @@ def login():
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
+   if 'session_token' in session:
+      return redirect(url_for('index'))
+   if request.method == 'POST':
+      name = request.form['name']
+      email = request.form['email']
+      password = request.form['userPassword']
+      print (name, email, password)
+      if createUser(name, email, password):
+         session['username'] = email
+         session['session_token'] = str(uuid.uuid4())
+         return redirect(url_for('index'))
+      else:
+         print ("User already exists")
+         return  render_template('signup.html', error='User already exists')
    return render_template('signup.html')
 
 
