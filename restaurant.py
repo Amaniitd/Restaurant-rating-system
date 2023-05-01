@@ -16,7 +16,7 @@ class restaurant:
       where_clause = "WHERE "
       if args.cuisine:
          where_clause += "id IN (SELECT restaurant_id FROM Cuisines WHERE cuisine_type = '" + args.cuisine + "') AND "
-      if args.price != "0":
+      if args.price:
          p = "$$$$"
          if args.price == "1":
             p = "$"
