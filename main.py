@@ -113,19 +113,6 @@ def update():
    return render_template('update.html')
 
 
-@app.route('/search', methods=['GET'])
-def search_restaurant():
-   pincode = request.args.get('pincode')
-   cuisine = request.args.get('cuisine')
-   price = request.args.get('price')
-   dish = request.args.get('dish')
-   # create an instance of searchArgs
-   args = searchArgs(cuisine, price, pincode, dish)
-   # execute the search
-   restaurants = restaurant.search_restaurant(conn, args)
-
-   return render_template('search.html', restaurants=restaurants)
-
 @app.route('/showMenu', methods=['GET'])
 def showMenu():
    # restaurant name will be button value
