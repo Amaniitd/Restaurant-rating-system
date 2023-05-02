@@ -1,11 +1,13 @@
 
 class restaurant:
-   def __init__(self, id, name, address, priceRange, zipcode):
+   def __init__(self, id, name, address, priceRange, zipcode, rate_count, avg_rating):
       self.id = id
       self.name = name
       self.address = address
       self.priceRange = priceRange
       self.zipcode = zipcode
+      self.rate_count = rate_count
+      self.avg_rating = avg_rating
 
    # execute the search in the database
    
@@ -35,8 +37,9 @@ class restaurant:
          where_clause = ""
       else:
          where_clause = where_clause[:-5]
-      print (where_clause)
-      exe_cmd = "SELECT * FROM restaurant " + where_clause + " limit 100;"
+      exe_cmd1 = "SELECT * FROM restaurant " + where_clause + " limit 100"
+      
+      exe_cmd = "with t1 as (" + exe_cmd1 + ") select t1.id, name, fullAddress, priceRange, zipCode, count(*) as rate_count, cast(COALESCE(avg(total_rating), 0)as DECIMAL(10, 1)) as avg_rating from t1 left join Rating on t1.id = Rating.restaurant_id group by t1.id, name, fullAddress, priceRange, zipCode order by avg_rating desc, rate_count desc limit 100;"
       print (exe_cmd)
       cur.execute(exe_cmd)
       # fetch the results
@@ -47,7 +50,7 @@ class restaurant:
       restaurants = []
       # iterate through the result set and create restaurant objects
       for row in rows:
-         restaurants.append(restaurant(row[0], row[1], row[2], row[3], row[4]))
+         restaurants.append(restaurant(row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
       # return the list
       return restaurants
    

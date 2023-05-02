@@ -20,7 +20,7 @@
 
     <div class="mainHeading">
 
-    <h1>Cool Website Name</h1>
+    <h1>Aaalu Jeera</h1>
     </div>
 
     <div class="container">
@@ -76,11 +76,30 @@
             <Address>{{ restaurant.address }}</Address>
             </p>
             <p>Price Range: {{ restaurant.priceRange }}</p>
+            <!-- show rating as stars and number of ratings as subtext -->
+            {% if restaurant.avg_rating != None %}
+            <p>Rating: {{restaurant.avg_rating}} <i class="fa-solid fa-star"></i> ({{restaurant.rate_count}})</p>
+            {% else %}
+            <p>Rating: 0 <i class="fa-solid fa-star"></i> (0)</p>
+            {% endif %}
+            <div class = "buttons">
             <form action="/showMenu" method="GET">
                 <input type="hidden" name="id" value="{{ restaurant.id }}">
                 <input type="hidden" name="name" value="{{ restaurant.name }}">
                 <button type="submit" class="menuButton">View Menu</button>
             </form>
+            <!-- update menu button -->
+            <form action="/updateMenu" method="GET">
+                <input type="hidden" name="id" value="{{ restaurant.id }}">
+                <input type="hidden" name="name" value="{{ restaurant.name }}">
+                <button type="submit" class="menuButton">Update Menu</button>
+            </form>
+            <!-- rating button -->
+            <form action="/rate" method="POST">
+                <input type="hidden" name="id" value="{{ restaurant.id }}">
+                <button type="submit" class="menuButton">Rate</button>
+            </form>
+            </div>
         </div>
         {% endfor %}
     

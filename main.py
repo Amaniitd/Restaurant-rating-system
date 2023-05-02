@@ -31,9 +31,26 @@ def isUserExists(email, password):
    else:
       return True
 
+def getUserId (email, password):
+   # create a cursor
+   cur = conn.cursor()
+   # execute a query
+   exe_cmd = "SELECT id FROM users WHERE email = '" + email + "' AND password = '" + password + "';"
+   print (exe_cmd)
+   cur.execute(exe_cmd)
+   # fetch the results
+   rows = cur.fetchall()
+   # close the cursor
+   cur.close()
+   if len(rows) == 0:
+      return -1
+   else:
+      return rows[0][0]
+
+
 def createUser(name, email, password):
    if isUserExists(email, password):
-      return False
+      return -1
    else:
       # max of all existing user ids
       cur = conn.cursor()
@@ -54,7 +71,7 @@ def createUser(name, email, password):
       conn.commit()
       # close the cursor
       cur.close()
-      return True
+      return max_id + 1
 
 
 
@@ -82,7 +99,7 @@ def login():
       password = request.form['userPassword']
       print (username, password)
       if isUserExists(username, password):
-         session['username'] = username
+         session['username'] = getUserId(username, password)
          session['session_token'] = str(uuid.uuid4())
          return redirect(url_for('index'))
       else:
@@ -98,8 +115,9 @@ def signup():
       email = request.form['email']
       password = request.form['userPassword']
       print (name, email, password)
-      if createUser(name, email, password):
-         session['username'] = email
+      user_id = createUser(name, email, password)
+      if user_id != -1:
+         session['username'] = user_id
          session['session_token'] = str(uuid.uuid4())
          return redirect(url_for('index'))
       else:
@@ -133,6 +151,49 @@ def logout():
    return redirect(url_for('login'))
 
 
+def updateRating(restaurant_id, overall, food, service, ambience):
+   # create a cursor
+   cur = conn.cursor()
+   # max of all existing ids
+   exe_cmd = "SELECT MAX(id) FROM Rating;"
+   cur.execute(exe_cmd)
+   rows = cur.fetchall()
+   cur.close()
+   max_id = rows[0][0]
+   if max_id == None:
+      max_id = 1
+   
+   user_id = session['username']
+   
+   # id, user_id, restaurant_id, overall, food, service, ambience
+   exe_cmd = "INSERT INTO Rating VALUES (" + str(max_id + 1) + ", '" + str(user_id) + "', '" + str(restaurant_id) + "', '" + str(overall) + "', '" + str(food) + "', '" + str(service) + "', '" + str(ambience) + "');"
+
+   # create a cursor
+   cur = conn.cursor()
+
+
+   cur.execute(exe_cmd)
+   # commit the changes
+   conn.commit()
+   # close the cursor
+   cur.close()
+
+@app.route('/rating' , methods=['POST'])
+def rating():
+   overall = request.form['overall_rating']
+   food = request.form['food_rating']
+   service = request.form['service_rating']
+   ambience = request.form['ambience_rating']
+   id = request.form['id']
+   updateRating(id, overall, food, service, ambience)
+   return render_template('rating.html')
+
+
+
+@app.route('/rate', methods=['POST'])
+def rate():
+   restaurant_id = request.form['id']
+   return render_template('rate.html', id = restaurant_id)
 
 
 if __name__ == '__main__':
