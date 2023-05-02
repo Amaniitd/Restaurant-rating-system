@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   <title>Cool website name</title>
+</head>
+
+<body>
+   <div class="topnav">
+      <a href="/">Search</a>
+      <a class="active" href="/admin">Admin</a>
+      <div class="user-name-logout">
+         <!-- fetch username and show it -->
+         <p>{{userEmail}}</p>
+         <a href="/logout">Logout</a>
+      </div>
+   </div>
+
+   <div class="mainHeading">
+
+      <h1>Restaurant Rating System</h1>
+   </div>
+   <div class = "rest-heading">
+      <h2>Your restaurants</h2>
+   </div>
+   <main class="rest-container">
+      <!-- iterate through the list -->
+      {% for restaurant in restaurants %}
+      <div id="card">
+         <h2>{{ restaurant.name }}</h2>
+         <p>
+         <Address>{{ restaurant.address }}</Address>
+         </p>
+         <p>Price Range: {{ restaurant.priceRange }}</p>
+         <!-- show rating as stars and number of ratings as subtext -->
+         {% if restaurant.avg_rating != None %}
+         <p>Rating: {{restaurant.avg_rating}} <i class="fa-solid fa-star"></i> ({{restaurant.rate_count}})</p>
+         {% else %}
+         <p>Rating: 0 <i class="fa-solid fa-star"></i> (0)</p>
+         {% endif %}
+         <div class="buttons">
+            <form action="/showMenu" method="GET">
+               <input type="hidden" name="id" value="{{ restaurant.id }}">
+               <input type="hidden" name="name" value="{{ restaurant.name }}">
+               <button type="submit" class="menuButton">Add Item</button>
+            </form>
+   
+            <!-- rating button -->
+            <form action="/rate" method="POST">
+               <input type="hidden" name="id" value="{{ restaurant.id }}">
+               <button type="submit" class="menuButton">Delete Item</button>
+            </form>
+            <form action="/rate" method="POST">
+               <input type="hidden" name="id" value="{{ restaurant.id }}">
+               <button type="submit" class="menuButton">Delete Restaurant</button>
+            </form>
+         </div>
+      </div>
+      {% endfor %}
+   </main>
+   <div class = "rest-heading">
+      <h2>Add a new restaurant</h2>
+   </div>
+   <form action="/addRestaurant" method="POST">
+         <div class="addRestaurant">
+      <div class="form-group">
+         <label for="name">Restaurant Name</label>
+         <input type="text" class="form-control" id="pincode" placeholder="Enter name" name="name">
+      </div>
+      <div class="form-group">
+         <label for="address">Address</label>
+         <input type="text" class="form-control" id="pincode" placeholder="Enter address" name="address">
+      </div>
+      <div class="form-group">
+         <label for="pincode">Pincode</label>
+         <input type="number" class="form-control" id="pincode" placeholder="Enter pincode" name="pincode">
+      </div>
+      <div class="form-group">
+         <label for="priceRange">Price Range</label>
+         <select class="form-control" id="pincode" name="priceRange">
+            <option value="1">💸</option>
+            <option value="2">💸💸</option>
+            <option value="3">💸💸💸</option>
+            <option value="4">💸💸💸💸</option>
+         </select>
+      </div>
+      <div class="form-group">
+         <label for="cuisine">Cuisines</label>
+         <input type="text" class="form-control" id="cuisine" placeholder="Enter cuisine" name="cuisine">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+   </form>
+</body>
+<script src="https://kit.fontawesome.com/b98b113d2c.js" crossorigin="anonymous"></script>
+
+</html>

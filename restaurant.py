@@ -53,4 +53,36 @@ class restaurant:
          restaurants.append(restaurant(row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
       # return the list
       return restaurants
+
+   def get_owner_restaurants(conn, userid):
+      # create a cursor
+      cur = conn.cursor()
+      # execute a query
+      exe_cmd = "SELECT restaurant_id FROM Owner WHERE user_id = " + str(userid) + ";"
+      print (exe_cmd)
+      cur.execute(exe_cmd)
+      # fetch the results
+      rows = cur.fetchall()
+      # close the cursor
+      cur.close()
+      # create a list to hold the restaurant objects
+      restaurants = []
+      # iterate through the result set and create restaurant objects
+      for row in rows:
+         # create a cursor
+         cur = conn.cursor()
+         # execute a query
+         exe_cmd = "with t1 as (SELECT * FROM restaurant WHERE id = " + str(row[0]) + ") select t1.id, name, fullAddress, priceRange, zipCode, sum(case when total_rating IS NOT NULL then 1 else 0 end) as rate_count, cast(COALESCE(avg(total_rating), 0)as DECIMAL(10, 1)) as avg_rating from t1 left join Rating on t1.id = Rating.restaurant_id group by t1.id, name, fullAddress, priceRange, zipCode;"
+         print (exe_cmd)
+         cur.execute(exe_cmd)
+         # fetch the results
+         rows1 = cur.fetchall()
+         # close the cursor
+         cur.close()
+         # iterate through the result set and create restaurant objects
+         for row1 in rows1:
+            restaurants.append(restaurant(row1[0], row1[1], row1[2], row1[3], row1[4], row1[5], row1[6]))
+      # return the list
+      return restaurants
+
    

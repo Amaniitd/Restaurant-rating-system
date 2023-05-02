@@ -25,7 +25,6 @@
 }
 
 
-/* ====================== HEADING SECTION ============================== */
 .mainHeading h1{
     margin: 0 auto;
     width: 80%;
@@ -256,6 +255,12 @@ main {
     resize: none;
 }
 
+.rest-container {
+   width: 60%;
+   height: 250px;
+    margin-left : 10%;
+}
+
 span.validate-tooltip {
   background: #D91717;
   width: 100%;
@@ -410,6 +415,7 @@ input:-webkit-autofill {
 }
 .logo h1 {
   color: #00A885;
+  margin-top: 10px;
 }
 
 /* style error  */
@@ -450,13 +456,13 @@ input:-webkit-autofill {
 /* menuButton */
 .menuButton {
 /* set width */
-width: 300px;
+width: 200px;
 
 }
 
 .ratingButton {
   /* set width */
-  width: 300px;
+  width: 200px;
 }
 .feedback{
     width: 100%;
@@ -597,4 +603,40 @@ span.scale-rating label:before
     text-align: center;
     vertical-align: middle;
   z-index:2;
+}
+
+
+.rest-heading h2{
+    margin: 0 auto;
+    width: 80%;
+    font-size: 1.6rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.addRestaurant{
+    /* make this div a rectangular box */
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 10%;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #ccc;
+
+}
+
+.addMenu{
+    /* make this div a rectangular box */
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #ccc;
+
 }

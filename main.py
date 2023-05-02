@@ -127,10 +127,6 @@ def signup():
    return render_template('signup.html')
 
 
-@app.route('/update')
-def update():
-   return render_template('update.html')
-
 
 @app.route('/showMenu', methods=['GET'])
 def showMenu():
@@ -233,6 +229,89 @@ def rating():
 def rate():
    restaurant_id = request.form['id']
    return render_template('rate.html', id = restaurant_id)
+
+@app.route('/admin')
+def admin():
+   if 'session_token' not in session:
+      return redirect(url_for('login'))
+   userEmail = getEmail(session['username'])
+   restaurants = restaurant.get_owner_restaurants(conn, session['username'])
+   return render_template('admin.html', userEmail = userEmail, restaurants = restaurants)
+
+
+
+def addRestaurantToDB(name, cuisines, address, pincode, price):
+   # create a cursor
+   cur = conn.cursor()
+   # max of all existing ids
+   exe_cmd = "SELECT MAX(id) FROM Restaurant;"
+   cur.execute(exe_cmd)
+   rows = cur.fetchall()
+   cur.close()
+   max_id = rows[0][0]
+   if max_id == None:
+      max_id = 0
+   max_id += 1
+   # seperate all the cuisines
+   cuisines_list = cuisines.split(',')
+   # insert into cuisine table
+   for cuisine in cuisines_list:
+      exe_cmd = "INSERT INTO Cuisines VALUES (" + str(max_id) + ", '" + cuisine + "');"
+      print(exe_cmd)
+      # create a cursor
+      cur = conn.cursor()
+      cur.execute(exe_cmd)
+      # commit the changes
+      conn.commit()
+      # close the cursor
+      cur.close()
+   # insert into restaurant table
+   exe_cmd = "INSERT INTO Restaurant VALUES (" + str(max_id) + ", '" + name + "', '" + address + "', '" + price + "', '" + pincode  + "');"
+   print(exe_cmd)
+   # create a cursor
+   cur = conn.cursor()
+   cur.execute(exe_cmd)
+   # commit the changes
+   conn.commit()
+   # close the cursor
+   cur.close()
+
+   # insert into owner table
+   exe_cmd = "INSERT INTO Owner VALUES ('" + str(session['username']) + "', '" + str(max_id) + "');"
+   print(exe_cmd)
+   # create a cursor
+   cur = conn.cursor()
+   cur.execute(exe_cmd)
+   # commit the changes
+   conn.commit()
+   # close the cursor
+   cur.close()
+
+   
+
+@app.route('/addRestaurant', methods=['POST'])
+def addRestaurant():
+   name = request.form['name']
+   cuisines = request.form['cuisine']
+   address = request.form['address']
+   pincode = request.form['pincode']
+   price = request.form['priceRange']
+   if price == '1':
+      price = '$'
+   elif price == '2':
+      price = '$$'
+   elif price == '3':
+      price = '$$$'
+   elif price == '4':
+      price = '$$$$'
+   print (name, cuisines, address, pincode, price)
+   addRestaurantToDB(name, cuisines, address, pincode, price)
+   return render_template('admin.html')
+
+
+@app.route('/addMenu')
+def addMenu():
+   return render_template('addMenu.html')
 
 
 if __name__ == '__main__':
