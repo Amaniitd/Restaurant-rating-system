@@ -86,7 +86,8 @@ def index():
       args = searchArgs(cuisine, price, pincode, dish)
       # execute the search
       restaurants = restaurant.search_restaurant(conn, args)
-      return render_template('index.html', restaurants=restaurants)
+      userEmail = getEmail(session['username'])
+      return render_template('index.html', restaurants=restaurants, userEmail=userEmail)
    else:
       return redirect(url_for('login'))
 
@@ -151,6 +152,38 @@ def logout():
    return redirect(url_for('login'))
 
 
+def isRated(user_id, restaurant_id):
+   # create a cursor
+   cur = conn.cursor()
+   # execute a query
+   exe_cmd = "SELECT * FROM Rating WHERE user_id = '" + str(user_id) + "' AND restaurant_id = '" + str(restaurant_id) + "';"
+   print (exe_cmd)
+   cur.execute(exe_cmd)
+   # fetch the results
+   rows = cur.fetchall()
+   # close the cursor
+   cur.close()
+   if len(rows) == 0:
+      return False
+   else:
+      return True
+
+def getEmail(userid):
+   # create a cursor
+   cur = conn.cursor()
+   # execute a query
+   exe_cmd = "SELECT email FROM users WHERE id = '" + str(userid) + "';"
+   print (exe_cmd)
+   cur.execute(exe_cmd)
+   # fetch the results
+   rows = cur.fetchall()
+   # close the cursor
+   cur.close()
+   if len(rows) == 0:
+      return ""
+   else:
+      return rows[0][0]
+
 def updateRating(restaurant_id, overall, food, service, ambience):
    # create a cursor
    cur = conn.cursor()
@@ -166,7 +199,13 @@ def updateRating(restaurant_id, overall, food, service, ambience):
    user_id = session['username']
    
    # id, user_id, restaurant_id, overall, food, service, ambience
-   exe_cmd = "INSERT INTO Rating VALUES (" + str(max_id + 1) + ", '" + str(user_id) + "', '" + str(restaurant_id) + "', '" + str(overall) + "', '" + str(food) + "', '" + str(service) + "', '" + str(ambience) + "');"
+
+   # if user has already rated the restaurant, update the rating
+   exe_cmd = ""
+   if isRated(user_id, restaurant_id):
+      exe_cmd = "UPDATE Rating SET total_rating = " + str(overall) + ", food_rating = " + str(food) + ", service_rating = " + str(service) + ", ambience_rating = " + str(ambience) + " WHERE user_id = " + str(user_id) + " AND restaurant_id = " + str(restaurant_id) + ";"
+   else:
+      exe_cmd = "INSERT INTO Rating VALUES (" + str(max_id + 1) + ", '" + str(user_id) + "', '" + str(restaurant_id) + "', '" + str(overall) + "', '" + str(food) + "', '" + str(service) + "', '" + str(ambience) + "');"
 
    # create a cursor
    cur = conn.cursor()
