@@ -10,7 +10,7 @@
 <body>
     <div class="topnav">
         <a class="active" href="/">Search</a>
-        <a href="./update">Update</a>
+        <a href="./update">Admin</a>
         <div class="user-name-logout">
             <!-- fetch username and show it -->
             <p>{{userEmail}}</p>
@@ -88,12 +88,7 @@
                 <input type="hidden" name="name" value="{{ restaurant.name }}">
                 <button type="submit" class="menuButton">View Menu</button>
             </form>
-            <!-- update menu button -->
-            <form action="/updateMenu" method="GET">
-                <input type="hidden" name="id" value="{{ restaurant.id }}">
-                <input type="hidden" name="name" value="{{ restaurant.name }}">
-                <button type="submit" class="menuButton">Update Menu</button>
-            </form>
+
             <!-- rating button -->
             <form action="/rate" method="POST">
                 <input type="hidden" name="id" value="{{ restaurant.id }}">

@@ -441,7 +441,7 @@ input:-webkit-autofill {
 /* buttons div */
 .buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   margin-left: auto;
   margin-right: auto; 
@@ -450,13 +450,13 @@ input:-webkit-autofill {
 /* menuButton */
 .menuButton {
 /* set width */
-width: 200px;
+width: 300px;
 
 }
 
 .ratingButton {
   /* set width */
-  width: 200px;
+  width: 300px;
 }
 .feedback{
     width: 100%;
