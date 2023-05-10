@@ -134,7 +134,7 @@ def showMenu():
    restaurant_name = request.args.get('name')
    rest_id = request.args.get('id')
    # execute the search
-   menus_list = menu.search_menu(conn, restaurant_name, rest_id)
+   menus_list = menu.search_menu(conn, rest_id)
    # create an instance of menus
    menus_arg = menus(restaurant_name, rest_id, menus_list)
 
@@ -306,12 +306,87 @@ def addRestaurant():
       price = '$$$$'
    print (name, cuisines, address, pincode, price)
    addRestaurantToDB(name, cuisines, address, pincode, price)
-   return render_template('admin.html')
+   return redirect(url_for('admin'))
 
 
-@app.route('/addMenu')
+@app.route('/addMenu', methods=['POST'])
 def addMenu():
-   return render_template('addMenu.html')
+   restaurant_id = request.form['id']
+   menu_name = request.form['name']
+   return render_template('addMenu.html', id = restaurant_id, name = menu_name)
+
+@app.route('/menu2', methods=['POST'])
+def menu2():
+   restaurant_name = request.form['name']
+   rest_id = request.form['id']
+   # execute the search
+   menus_list = menu.search_menu(conn, rest_id)
+   # create an instance of menus
+   menus_arg = menus(restaurant_name, rest_id, menus_list)
+
+   return render_template('menu2.html', menus=menus_arg, rest_id=rest_id)
+
+def addMenuCmd(restaurant_id, name, price, category, description):
+   return "INSERT INTO DISH(restaurant_id, name, price, category, description) VALUES(" + str(restaurant_id) + ",'"  + str(name) + "'," + str(price) + ",'" + str(category) + "','" + str(description) + "');" 
+
+@app.route('/menuSubmit', methods=['POST'])
+def menuSubmit():
+   # code to add menu to database
+   restaurant_id = request.form['id']
+   name = request.form['name']
+   price = request.form['price']
+   category = request.form['category']
+   description = request.form['description']
+   exe_cmd = addMenuCmd(restaurant_id, name, price, category, description)
+   print(exe_cmd)
+   # create a cursor
+   cur = conn.cursor()
+   cur.execute(exe_cmd)
+   # commit the changes
+   conn.commit()
+   # close the cursor
+   cur.close()
+   return render_template('menuSubmit.html')
+
+
+def deleteRestaurantCmd(restaurant_id):
+    return "DELETE FROM Restaurant WHERE id = " + str(restaurant_id) + "; " + "DELETE FROM Dish WHERE restaurant_id = " + str(restaurant_id) + "; " + "DELETE FROM Cuisines WHERE restaurant_id = " + str(restaurant_id) + "; " + "DELETE FROM Rating WHERE restaurant_id = " + str(restaurant_id) + "; " + "DELETE FROM Owner WHERE restaurant_id = " + str(restaurant_id) + ";"
+
+
+
+@app.route('/deleteRest', methods=['POST'])
+def deleteRest():
+   restaurant_id = request.form['id']
+   # delete the restaurant
+   exe_cmd = deleteRestaurantCmd(restaurant_id)
+
+   # create a cursor
+   cur = conn.cursor()
+   cur.execute(exe_cmd)
+   # commit the changes
+   conn.commit()
+   # close the cursor
+   cur.close()
+   return render_template('deleteRest.html')
+
+
+def deleteMenuCmd(restaurant_id, menu_name):
+   return "DELETE FROM Dish WHERE restaurant_id = " + str(restaurant_id) + " and name = '" + str(menu_name) + "';"
+
+@app.route('/deleteMenu', methods=['POST'])
+def deleteMenu():
+   restaurant_id = request.form['id']
+   menu_name = request.form['name']
+   # delete the menu
+   exe_cmd = deleteMenuCmd(restaurant_id, menu_name)
+   # create a cursor
+   cur = conn.cursor()
+   cur.execute(exe_cmd)
+   # commit the changes
+   conn.commit()
+   # close the cursor
+   cur.close()
+   return render_template('deleteMenu.html')
 
 
 if __name__ == '__main__':

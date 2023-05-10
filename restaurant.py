@@ -39,7 +39,7 @@ class restaurant:
          where_clause = where_clause[:-5]
       exe_cmd1 = "SELECT * FROM restaurant " + where_clause + " limit 100"
       
-      exe_cmd = "with t1 as (" + exe_cmd1 + ") select t1.id, name, fullAddress, priceRange, zipCode, count(*) as rate_count, cast(COALESCE(avg(total_rating), 0)as DECIMAL(10, 1)) as avg_rating from t1 left join Rating on t1.id = Rating.restaurant_id group by t1.id, name, fullAddress, priceRange, zipCode order by avg_rating desc, rate_count desc limit 100;"
+      exe_cmd = "with t1 as (" + exe_cmd1 + ") select t1.id, name, fullAddress, priceRange, zipCode, sum(case when total_rating IS NOT NULL then 1 else 0 end) as rate_count, cast(COALESCE(avg(total_rating), 0)as DECIMAL(10, 1)) as avg_rating from t1 left join Rating on t1.id = Rating.restaurant_id group by t1.id, name, fullAddress, priceRange, zipCode;"
       print (exe_cmd)
       cur.execute(exe_cmd)
       # fetch the results

@@ -7,7 +7,7 @@ class menu:
       self.category = category
       self.description = description
 
-   def search_menu(conn, restaurant_name, rest_id):
+   def search_menu(conn, rest_id):
       # create a cursor
       cur = conn.cursor()
       # execute a query

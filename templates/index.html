@@ -77,7 +77,7 @@
             </p>
             <p>Price Range: {{ restaurant.priceRange }}</p>
             <!-- show rating as stars and number of ratings as subtext -->
-            {% if restaurant.avg_rating != None %}
+            {% if restaurant.avg_rating != None%}
             <p>Rating: {{restaurant.avg_rating}} <i class="fa-solid fa-star"></i> ({{restaurant.rate_count}})</p>
             {% else %}
             <p>Rating: 0 <i class="fa-solid fa-star"></i> (0)</p>

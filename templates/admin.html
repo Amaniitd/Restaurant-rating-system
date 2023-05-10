@@ -43,18 +43,17 @@
          <p>Rating: 0 <i class="fa-solid fa-star"></i> (0)</p>
          {% endif %}
          <div class="buttons">
-            <form action="/showMenu" method="GET">
+            <form action="/addMenu" method="POST">
                <input type="hidden" name="id" value="{{ restaurant.id }}">
                <input type="hidden" name="name" value="{{ restaurant.name }}">
                <button type="submit" class="menuButton">Add Item</button>
             </form>
-   
-            <!-- rating button -->
-            <form action="/rate" method="POST">
+            <form action="/menu2" method="POST">
                <input type="hidden" name="id" value="{{ restaurant.id }}">
+               <input type="hidden" name="name" value="{{ restaurant.name }}">
                <button type="submit" class="menuButton">Delete Item</button>
             </form>
-            <form action="/rate" method="POST">
+            <form action="/deleteRest" method="POST">
                <input type="hidden" name="id" value="{{ restaurant.id }}">
                <button type="submit" class="menuButton">Delete Restaurant</button>
             </form>
